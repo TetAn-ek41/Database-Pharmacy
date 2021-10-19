@@ -70,3 +70,34 @@ id int not null primary key,
 type nvarchar (20) not null,
 rate int not null
 )
+create table Sales (
+	id_pharmacy int not null,
+	check_number int not null primary key,
+	id_preparation int not null,
+	quantity int not null,
+	id_discount int not null,
+	amount_discount money not null,
+	amount_check money not null,
+	date_sales date not null,
+	id_employee int not null,
+	id_client int not null
+)
+	alter table Sales
+	add constraint FK_discount_sales foreign key(id_discount) references Discount(id)
+	alter table Sales
+	add constraint FK_employee_sales foreign key(id_employee) references Employee(id)
+	alter table Sales
+	add constraint FK_client_sales foreign key(id_client) references Client(id)
+
+create table Pharmacyy (
+	id int not null primary key,
+	adress nvarchar(50) not null,
+	work_schedule time not null,
+	phone char(12) not null
+)
+	alter table Sales
+	add constraint FK_pharmacyy_sales foreign key(id_pharmacy) references Pharmacyy(id)
+	alter table Composition
+	add constraint FK_pharmacyy_composition foreign key(id_pharmacy) references Pharmacyy(id)
+	alter table Delivery
+	add constraint FK_pharmacyy_delivery foreign key(id_pharmacy) references Pharmacyy(id)
