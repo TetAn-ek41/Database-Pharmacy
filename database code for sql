@@ -14,7 +14,7 @@ create table Preparation (
 	id_producer int not null,
 	price money not null,
 	form nvarchar(20) not null,
-	pharmacological_properties nvarchar(200)
+	pharmacological_properties nvarchar(300)
 )
 	alter table Preparation
 	add constraint FK_producer_preparation foreign key(id_producer) references Producer(id)
