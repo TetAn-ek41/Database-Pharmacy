@@ -70,7 +70,7 @@ create table Employee (
 
 create table Discount (
 	id int not null primary key,
-	type nvarchar (50) not null,
+	type nvarchar (100) not null,
 	rate int not null
 )
 create table Sales (
