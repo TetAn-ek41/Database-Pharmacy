@@ -389,3 +389,86 @@ select sum(quantity) from Sales
 	FROM Discount
 	SELECT *
 	FROM Sales
+
+	--Запроси Дяченко
+	--1 Показувати поставки в ті аптеки з вказуванням їх адрес, які відбулися після 25 листопада
+	
+	SELECT d.id_pharmacy, d.date_delivery, p.adress
+	FROM dbo.Delivery AS d INNER JOIN dbo.Pharmacyy AS p
+	ON d.id_pharmacy=p.id
+	WHERE d.date_delivery > '20211125'
+
+	--2 Показувати тих клієнтів, у яких оператор Київстар, тобто починається на 067, 068, 097, 098 та посортувати їх по алфавіту
+
+	SELECT surname, name, phone
+	FROM Client
+	Where phone LIKE '380[6,9][7,8][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+	ORDER BY surname
+	
+	--3 Показувати, які препарати виготовляє кожен виробник
+
+	SELECT p.name, pr.id, pr.name
+	FROM Producer AS p INNER JOIN Preparation AS pr
+	ON p.id=pr.id_producer
+	ORDER BY p.name
+
+	--4 Перемейнувати назви стовпців в таблиці Працівники та посортувати їх по посаді
+
+	SELECT id AS 'Код працівника', name AS 'Імя', surname AS 'Прізвище', date_of_birth AS 'Дата народження', phone AS 'Телефон', position AS 'Посада', id_pharmacy AS 'Код аптеки' 
+	FROM Employee
+	ORDER BY position
+
+	--5 Порахувати середню суму чеку мережи аптек
+
+	SELECT AVG(amount_check) AS 'Середня сума чеку'
+	FROM Sales
+
+	--6  Порахувати середню, максимальну та мінімальну суму чеку в кожній аптеці?
+	
+	SELECT id_pharmacy,
+	AVG(amount_check) AS 'Середня сума чеку', MAX(amount_check) AS 'Максимальна сума чеку', MIN(amount_check) AS 'Мінімальна сума чеку'
+	FROM Sales
+	GROUP BY id_pharmacy
+
+	--7 Показати на які замовлення не рахувалась Акція за листопад
+	
+	SELECT s.id_pharmacy, s.check_number, s.id_preparation, s.quantity, s.id_discount, d.type,s.date_sales
+	FROM Sales AS s INNER JOIN Discount AS d
+	ON s.id_discount=d.id
+	WHERE date_sales >= '01.12.2021'
+	ORDER BY date_sales
+
+	--8 Показати не вітчизняних виробників препаратів
+
+	SELECT name, country
+	FROM Producer
+	WHERE country != 'Україна'
+
+	--9 Показати товари, яких лишилось на складі не менше 5 одиниць
+	
+	SELECT c.id_pharmacy, c.id_preparation, p.name, c.quantity
+	FROM Composition AS c INNER JOIN Preparation AS p
+	ON c.id_preparation=p.id
+	WHERE c.quantity<=5
+	
+	--10 Відсортувати препарати за ціною (спадаюче сортування)
+
+	SELECT *
+	FROM Preparation
+	Order by price DESC
+	
+	--11 Показати покупців, які досягли пенсійного віку 60 і вказати який їх вік
+	
+	SELECT name, surname, date_of_birth, DATEDIFF (yy, date_of_birth, GETDATE()) AS 'Вік'
+	FROM Client
+	WHERE date_of_birth <= '19611108'
+
+	--12 Показати товари, які купували клієнти пенсійного віку в аптеках
+
+	SELECT s.id_pharmacy, s.id_preparation, p.name, s.quantity, s.amount_check, s.date_sales, s.id_client, c.name, c.surname, c.date_of_birth
+	FROM Sales AS s 
+	INNER JOIN Client as c ON s.id_client=c.id
+	INNER JOIN Preparation as p ON s.id_preparation=p.id
+	WHERE date_of_birth <= '19611108'
+	Order by id_client
+	
