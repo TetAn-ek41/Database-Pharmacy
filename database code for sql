@@ -352,6 +352,20 @@ INSERT INTO Delivery
 	('0016','610','1111','1','668','21.10','119.80','20211206','10001','0015')
 	
 	
+select * from Preparation 
+     where id_producer = 4
+
+select pn.name,pn.price,pn.pharmacological_properties from Preparation as pn 
+       inner join Producer as pr 
+       on pn.id_producer = pr.id 
+          where pr.name = 'Pfizer'
+	  
+select sum(quantity) from Delivery 
+     where date_delivery = '2021-11-7'
+     
+select sum(quantity) from Sales 
+       where date_sales >= '2021-11-1' and date_sales <= '2021-11-30'
+	
 	
 	SELECT *
 	FROM Producer
